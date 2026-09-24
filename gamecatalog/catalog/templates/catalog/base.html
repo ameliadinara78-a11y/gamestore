@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Open Arcade Index{% endblock %}</title>
+    <meta name="description" content="A curated index of free and open-source games you can play, study, and build on.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: "#EDEBE4",
+                        panel: "#FBFAF7",
+                        ink: "#16161A",
+                        muted: "#6B6960",
+                        indigo: "#2647E0",
+                        hotpink: "#FF3D7F",
+                        hair: "rgba(22,22,26,0.14)",
+                    },
+                    fontFamily: {
+                        display: ['Archivo', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    maxWidth: {
+                        wrap: "78rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { background-color: #EDEBE4; color: #16161A; }
+        .htmx-indicator { opacity: 0; transition: opacity 120ms ease; }
+        .htmx-request .htmx-indicator { opacity: 1; }
+        .htmx-request.htmx-indicator { opacity: 1; }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            * { transition: none !important; }
+        }
+    </style>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js"></script>
+    <script>
+        document.body.addEventListener("htmx:configRequest", function (event) {
+            const token = document.querySelector('meta[name="csrf-token"]');
+            if (token) {
+                event.detail.headers["X-CSRFToken"] = token.content;
+            }
+        });
+    </script>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body class="min-h-full font-sans antialiased selection:bg-hotpink selection:text-paper">
+    <header class="border-b border-hair">
+        <div class="max-w-wrap mx-auto px-5 md:px-8 h-16 flex items-center justify-between">
+            <a href="{% url 'catalog:index' %}" class="flex items-baseline gap-2">
+                <span class="font-display font-extrabold text-xl tracking-tight">Open Arcade</span>
+                <span class="font-mono text-xs text-muted">/ index</span>
+            </a>
+            <a href="#catalog" class="font-mono text-xs text-indigo hover:text-hotpink">browse the shelf</a>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="border-t border-hair mt-24">
+        <div class="max-w-wrap mx-auto px-5 md:px-8 py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <p class="text-sm text-muted max-w-md">
+                Every title here ships its source under a free license. Play it, read it, fork it.
+            </p>
+            <p class="font-mono text-xs text-muted">built on django · htmx · tailwind</p>
+        </div>
+    </footer>
+</body>
+</html>

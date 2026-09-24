@@ -1,0 +1,49 @@
+<div class="flex items-center justify-between mb-6">
+    <p class="font-mono text-xs text-muted">
+        <span class="text-ink">{{ page_obj.paginator.count }}</span> result{{ page_obj.paginator.count|pluralize }}
+        {% if query %}for “{{ query }}”{% endif %}
+    </p>
+    <span class="htmx-indicator font-mono text-xs text-indigo">loading…</span>
+</div>
+
+{% if games %}
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+    {% for game in games %}
+        {% include "catalog/partials/game_card.html" %}
+    {% endfor %}
+</div>
+
+{% if page_obj.has_other_pages %}
+<nav class="flex items-center justify-between mt-10 pt-6 border-t border-hair">
+    <div>
+        {% if page_obj.has_previous %}
+        <button
+            hx-get="?page={{ page_obj.previous_page_number }}"
+            hx-include="#filters"
+            hx-target="#game-results"
+            hx-push-url="true"
+            class="font-mono text-xs text-indigo hover:text-hotpink">← previous</button>
+        {% endif %}
+    </div>
+    <p class="font-mono text-xs text-muted">
+        page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+    </p>
+    <div>
+        {% if page_obj.has_next %}
+        <button
+            hx-get="?page={{ page_obj.next_page_number }}"
+            hx-include="#filters"
+            hx-target="#game-results"
+            hx-push-url="true"
+            class="font-mono text-xs text-indigo hover:text-hotpink">next →</button>
+        {% endif %}
+    </div>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="border border-dashed border-hair rounded-lg py-16 px-6 text-center">
+    <p class="font-display font-bold text-xl">Nothing on this shelf yet.</p>
+    <p class="mt-2 text-sm text-muted">Clear a filter or try a different search to see more games.</p>
+</div>
+{% endif %}

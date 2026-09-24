@@ -1,0 +1,25 @@
+<article class="group relative bg-panel border border-hair rounded-lg p-5 flex flex-col hover:border-ink transition-colors">
+    <div class="flex items-start justify-between gap-3">
+        <a href="{{ game.get_absolute_url }}" class="font-display font-bold text-lg leading-tight hover:text-indigo focus:outline-none focus:text-indigo">
+            <span class="absolute inset-0" aria-hidden="true"></span>
+            {{ game.title }}
+        </a>
+        <span class="shrink-0 font-mono text-xs text-muted">★ {{ game.stars }}</span>
+    </div>
+
+    <p class="mt-2 text-sm text-muted line-clamp-3">{{ game.summary }}</p>
+
+    <div class="mt-4 flex flex-wrap gap-1.5">
+        {% for tag in game.tags.all %}
+        <span class="text-xs px-2 py-0.5 rounded-full border border-hair text-muted">{{ tag.name }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="mt-5 pt-4 border-t border-hair flex items-center justify-between">
+        <span class="font-mono text-xs {% if game.license.is_copyleft %}text-hotpink{% else %}text-indigo{% endif %}">{{ game.license.name }}</span>
+        {% if game.source_url %}
+        <a href="{{ game.source_url }}" target="_blank" rel="noopener noreferrer"
+           class="relative z-10 font-mono text-xs text-muted hover:text-ink opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity">source ↗</a>
+        {% endif %}
+    </div>
+</article>
